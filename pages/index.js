@@ -24,6 +24,20 @@ export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "data", "dummy-data.json");
   const jsonData = await fs.readFile(filePath);
   const data = JSON.parse(jsonData);
+
+  if (!data) {
+    // redirct 導向到其他頁面
+    return {
+      redirct: {
+        destination: "/no-data",
+      },
+    };
+  }
+
+  if (data.products.length == 0) {
+    // notFound: true 會進入 404 not found page
+    return { notFound: true };
+  }
   return {
     props: {
       products: data.products,
